@@ -2,29 +2,27 @@ const express = require("express");
 
 const router = express.Router();
 
-const Persona = require("../models/persona");
+ const Menu = require("../models/menu");
+ const Pedido = require("../models/pedido");
+ const persons = require("../models/persona");
 
-// const Reserva = require("../models/tiporeserva");
-// const Scooter = require("../models/scotter");
-// const persons = require("../models/personas");
-// const detalles = require("../models/detalle_reserva");
-//tipo_reservas metodos
-router.get("/treserva", (req, res) => {
+router.get("/menu", (req, res) => {
     const { query } = req;
-    Reserva.findAll({ where: query })
-        .then(reserva => {
-            res.json(reserva);
+    Menu.findAll({ where: query })
+        .then(menu => {
+            res.json(menu);
         })
         .catch(err => {
             res.send("error: " + err);
         });
 });
 
-router.post("/treserva", (req, res, next) => {
+router.post("/menu", (req, res, next) => {
     const datos = {
+        foto: req.body.foto,
         descripcion: req.body.descripcion,
         precio: req.body.precio,
-        hora: req.body.hora,
+        fecha: req.body.fecha,
     };
 
     if (!datos) {
@@ -34,7 +32,7 @@ router.post("/treserva", (req, res, next) => {
                 error: "Datos incorrectos"
             });
     } else {
-        Reserva.create(datos)
+        Menu.create(datos)
             .then(data => {
                 res.send(data);
             })
@@ -44,11 +42,11 @@ router.post("/treserva", (req, res, next) => {
     }
 });
 
- router.put("/treserva",async(req,res)=>{
+ router.put("/menu",async(req,res)=>{
     const { id } = req.query;
-    const {descripcion,precio,hora}=req.body;
-    const data =await Reserva.findAll({
-        atributes:["id","descripcion","precio","hora"],
+    const {foto,descripcion,precio,fecha}=req.body;
+    const data =await Menu.findAll({
+        atributes:["id","foto","descripcion","precio","fecha"],
         where:{
             id
         }
@@ -58,9 +56,10 @@ router.post("/treserva", (req, res, next) => {
         data.forEach(async element => {
            await element.update({
                 id,
+                foto,
                 descripcion,
                 precio,
-                hora,
+                fecha,
             });
         });
     }
@@ -71,9 +70,9 @@ router.post("/treserva", (req, res, next) => {
 });
 
 
-router.delete("/treserva", async (req, res) => {
+router.delete("/menu", async (req, res) => {
     const { id } = req.query;
-    const eliminar = await Reserva.destroy({
+    const eliminar = await Menu.destroy({
         where: { id }
     });
     res.json({
@@ -83,158 +82,12 @@ router.delete("/treserva", async (req, res) => {
 });
 
 
-//scooter metodos
-router.get("/scooter", (req, res) => {
-    const { query } = req;
-    Scooter.findAll({ where: query })
-        .then(scooter => {
-            res.json(scooter);
-        })
-        .catch(err => {
-            res.send("error: " + err);
-        });
-});
-
-router.post("/scooter", (req, res, next) => {
-    const datos = {
-        descripcion: req.body.descripcion,
-        estado: req.body.estado,
-        codigo: req.body.codigo,
-    };
-
-    if (!datos) {
-        res.status(400);
-        res,
-            json({
-                error: "Datos incorrectos"
-            });
-    } else {
-        Scooter.create(datos)
-            .then(data => {
-                res.send(data);
-            })
-            .catch(err => {
-                res.json("error: " + err);
-            });
-    }
-});
-
-router.put("/scooter",async(req,res)=>{
-    const { id } = req.query;
-    const {descripcion,estado,codigo}=req.body;
-    const data =await Scooter.findAll({
-        atributes:["id","descripcion","estado","codigo"],
-        where:{
-            id
-        }
-    });
-
-    if(data.length>0){
-        data.forEach(async element => {
-           await element.update({
-                id,
-                descripcion,
-                estado,
-                codigo,
-            });
-        });
-    }
-    return res.json({
-        message:"actualizado",
-        data:data
-    })
-});
-
-router.delete("/scooter", async (req, res) => {
-    const { codigo } = req.query;
-    const eliminar = await Reserva.destroy({
-        where: { codigo }
-    });
-    res.json({
-        message: "eliminado",
-        data: eliminar
-    })
-});
-
-
-
-
-//tipo_personas metodos
-router.get("/tpersona", (req, res) => {
-    const { query } = req;
-    Personas.findAll({ where: query })
-        .then(persona => {
-            res.json(persona);
-        })
-        .catch(err => {
-            res.send("error: " + err);
-        });
-});
-
-router.post("/tpersona", (req, res, next) => {
-    const datos = {
-        tipoPersonaNombre: req.body.tipoPersonaNombre,
-    };
-
-    if (!datos) {
-        res.status(400);
-        res,
-            json({
-                error: "Datos incorrectos"
-            });
-    } else {
-        Personas.create(datos)
-            .then(data => {
-                res.send(data);
-            })
-            .catch(err => {
-                res.json("error: " + err);
-            });
-    }
-});
-
-router.put("/tpersona",async(req,res)=>{
-    const { id } = req.query;
-    const {tipoPersonaNombre}=req.body;
-    const data =await Personas.findAll({
-        atributes:["tipoPersonaNombre"],
-        where:{
-            id
-        }
-    });
-
-    if(data.length>0){
-        data.forEach(async element => {
-           await element.update({
-                id,
-                tipoPersonaNombre,
-            });
-        });
-    }
-    return res.json({
-        message:"actualizado",
-        data:data
-    })
-});
-
-router.delete("/tpersona", async (req, res) => {
-    const { id } = req.query;
-    const eliminar = await Reserva.destroy({
-        where: { id }
-    });
-    res.json({
-        message: "eliminado",
-        data: eliminar
-    })
-});
-
-
-//personas metodos
+//scooter personas
 router.get("/persona", (req, res) => {
     const { query } = req;
     persons.findAll({ where: query })
-        .then(persona => {
-            res.json(persona);
+        .then(personas => {
+            res.json(personas);
         })
         .catch(err => {
             res.send("error: " + err);
@@ -243,12 +96,8 @@ router.get("/persona", (req, res) => {
 
 router.post("/persona", (req, res, next) => {
     const datos = {
-        nombres: req.body.nombres,
-        apellidos: req.body.apellidos,
-        direccion: req.body.direccion,
-        password: req.body.password,
-        email: req.body.email,
-        tipoPersonaNombre: req.body.tipoPersonaNombre,
+        nombre: req.body.nombre,
+        correo: req.body.correo,
     };
 
     if (!datos) {
@@ -267,11 +116,12 @@ router.post("/persona", (req, res, next) => {
             });
     }
 });
+
 router.put("/persona",async(req,res)=>{
     const { id } = req.query;
-    const {nombres,apellidos,direccion,password,email,tipoPersonaNombre}=req.body;
+    const {nombre,correo}=req.body;
     const data =await persons.findAll({
-        atributes:["nombres","apellidos","direccion","password","email","tipoPersonaNombre"],
+        atributes:["id","nombre","correo"],
         where:{
             id
         }
@@ -281,11 +131,8 @@ router.put("/persona",async(req,res)=>{
         data.forEach(async element => {
            await element.update({
                 id,
-                nombres,
-                apellidos,
-                password,
-                email,
-                tipoPersonaNombre,
+                nombre,
+                correo,
             });
         });
     }
@@ -294,10 +141,11 @@ router.put("/persona",async(req,res)=>{
         data:data
     })
 });
+
 router.delete("/persona", async (req, res) => {
-    const { id } = req.query;
-    const eliminar = await Reserva.destroy({
-        where: { id }
+    const { codigo } = req.query;
+    const eliminar = await persons.destroy({
+        where: { codigo }
     });
     res.json({
         message: "eliminado",
@@ -306,25 +154,25 @@ router.delete("/persona", async (req, res) => {
 });
 
 
-//detalles metodos
-router.get("/detalle", (req, res) => {
+
+
+//tipo_personas Pedido
+router.get("/pedido", (req, res) => {
     const { query } = req;
-    detalles.findAll({ where: query })
-        .then(detalle => {
-            res.json(detalle);
+    Pedido.findAll({ where: query })
+        .then(pedido => {
+            res.json(pedido);
         })
         .catch(err => {
             res.send("error: " + err);
         });
 });
 
-router.post("/detalle", (req, res, next) => {
+router.post("/pedido", (req, res, next) => {
     const datos = {
-        descripccion: req.body.descripccion,
-        precio_total: req.body.precio_total,
+        cantidad: req.body.cantidad,
         idpersona: req.body.idpersona,
-        idscooter: req.body.idscooter,
-        idTipoReserva: req.body.idTipoReserva,
+        idmenu: req.body.idmenu,
     };
 
     if (!datos) {
@@ -334,7 +182,7 @@ router.post("/detalle", (req, res, next) => {
                 error: "Datos incorrectos"
             });
     } else {
-        detalles.create(datos)
+        Pedido.create(datos)
             .then(data => {
                 res.send(data);
             })
@@ -344,11 +192,11 @@ router.post("/detalle", (req, res, next) => {
     }
 });
 
-router.put("/detalle",async(req,res)=>{
+router.put("/pedido",async(req,res)=>{
     const { id } = req.query;
-    const {descripccion,precio_total,idpersona,idscooter,idTipoReserva}=req.body;
-    const data =await detalles.findAll({
-        atributes:["descripccion","precio_total","idpersona","idscooter","idTipoReserva"],
+    const {cantidad,idpersona,idmenu}=req.body;
+    const data =await Pedido.findAll({
+        atributes:["cantidad","idpersona","idmenu"],
         where:{
             id
         }
@@ -358,11 +206,9 @@ router.put("/detalle",async(req,res)=>{
         data.forEach(async element => {
            await element.update({
                 id,
-                descripcion,
-                precio_total,
+                cantidad,
                 idpersona,
-                idscooter,
-                idTipoReserva,
+                idmenu,
             });
         });
     }
@@ -372,9 +218,9 @@ router.put("/detalle",async(req,res)=>{
     })
 });
 
-router.delete("/detalle", async (req, res) => {
+router.delete("/pedido", async (req, res) => {
     const { id } = req.query;
-    const eliminar = await Reserva.destroy({
+    const eliminar = await Pedido.destroy({
         where: { id }
     });
     res.json({
@@ -383,35 +229,13 @@ router.delete("/detalle", async (req, res) => {
     })
 });
 
-router.post("/treserva", (req, res, next) => {
-    const datos = {
-        descripcion: req.body.descripcion,
-        precio: req.body.precio,
-        hora: req.body.hora,
-    };
 
-    if (!datos) {
-        res.status(400);
-        res,
-            json({
-                error: "Datos incorrectos"
-            });
-    } else {
-        Reserva.create(datos)
-            .then(data => {
-                res.send(data);
-            })
-            .catch(err => {
-                res.json("error: " + err);
-            });
-    }
-});
 
 router.post("/login", (req, res, next) => {
     const correo = req.body.correo
     const nombre = req.body.nombre
 
-    Persona.findAll()
+    persons.findAll()
     .then(resultado => {
         resultado.forEach(element => {
             if(element.correo == correo && element.nombre == nombre){
