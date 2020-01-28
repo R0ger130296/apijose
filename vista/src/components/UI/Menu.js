@@ -68,7 +68,9 @@ import { Modal, ImageBackground, Text, TextInput, SafeAreaView, TouchableHighlig
             }}>
             <View style={styles.modalStyle}>
               <View>
-                <Button title="Choose File" onPress={this.chooseFile.bind(this)} />
+                <Button title="Choose File" 
+                // onPress={this.chooseFile.bind(this)} 
+                />
                 <Text>Producto:</Text>
                 <TextInput
                   style={{height: 40}}

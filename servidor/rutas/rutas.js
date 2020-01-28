@@ -4,10 +4,10 @@ const router = express.Router();
 
 const Persona = require("../models/persona");
 
-const Reserva = require("../models/tiporeserva");
-const Scooter = require("../models/scotter");
-const persons = require("../models/personas");
-const detalles = require("../models/detalle_reserva");
+// const Reserva = require("../models/tiporeserva");
+// const Scooter = require("../models/scotter");
+// const persons = require("../models/personas");
+// const detalles = require("../models/detalle_reserva");
 //tipo_reservas metodos
 router.get("/treserva", (req, res) => {
     const { query } = req;
@@ -408,34 +408,24 @@ router.post("/treserva", (req, res, next) => {
 });
 
 router.post("/login", (req, res, next) => {
-    const datos = {
-        correo = req.body.correo,
-        nombre = req.body.nombre
-    }
+    const correo = req.body.correo
+    const nombre = req.body.nombre
 
-    if (!datos) {
-        res.status(400);
-        res,
-            json({
-                error: "Solicitud Incorrecta"
-            });
-    } else {
     Persona.findAll()
-        .then(resultado => {
-            resultado.forEach(element => {
-                if(element.correo == correo && element.nombre == nombre){
-                    res.status(200).json({
-                    ok: true,
-                    mensaje: "found"
-                    })
-                }
-                return res.status(500).json({
-                    ok: false,
-                    mensaje: 'no-found'
+    .then(resultado => {
+        resultado.forEach(element => {
+            if(element.correo == correo && element.nombre == nombre){
+                res.status(200).json({
+                ok: true,
+                mensaje: "found"
                 })
+            }
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'no-found'
             })
         })
-    }
+    })
 });
 
 module.exports = router;

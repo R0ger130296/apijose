@@ -1,9 +1,13 @@
 import * as React from 'react';
-import { Text,TextInput,View,Button, Image,ImageBackground, StyleSheet } from 'react-native';
+import { Text,TextInput,View,Button, Image,ImageBackground, StyleSheet, Form } from 'react-native';
 //import { Router, Scene } from 'react-native-router-flux'
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import Menu from './Menu'
+import axios from 'axios';
+
 const imgbg = require('../../assets/hamburger-895831_1280.jpg');
+
+const API_URL = "http://192.168.1.7:3000/api/login";  //CAMBIAR DEPENDIENDO IP DE SU MAQUINA
 
 class MenuScreen extends React.Component {
   render() {
@@ -14,34 +18,77 @@ class MenuScreen extends React.Component {
 }
 
 export default class LoginScreen extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      correo: '',
+      nombre: ''
+    };
+  }
+
+  changeHandler = (e) => {
+    this.setState({ [e.target.name]: e.target.value })
+  }
+
+  loginAccess = e => {
+    e.preventDefault()
+    if (this.state.correo === "" || this.state.clave === "") {
+      alert("Complete todos los datos para continuar...");
+    } else {
+      axios.post(API_URL, this.state)
+      .then(response => {
+        if ( response.data.mensaje === "found" ) {
+          alert("entrar")
+          // window.location.assign("http://localhost:3000/home");
+        }
+      })
+      .catch(error => {
+        alert("Datos Incorrectos")
+      })
+    }
+  };
+
   static navigationOptions ={
     header: null,
     error:null,
     title: 'Bienvenidos',
     nombre:'',
-    email:'',
+    correo:'',
     sending:false
   }
 
   render() {
+    const { correo, nombre } = this.state
     return (
         <ImageBackground source={{imgbg}} style={{width: '100%', height: '100%'}}>
           <View style={styles.container}>
-            <View style={styles.containerUserName}>
-              {/* <Icon type="font-awesome" name="user" color="gray" containerStyle={styles.icon}/> */}
-              <TextInput placeholder="Nombre" placeholderTextColor="gray"
-              style={styles.textInput}/> 
-            </View>
-            <View style={styles.separator1}/>
-            <View style={styles.containerPassword}>
-              {/* <Icon type="entypo" name="key" color="gray" containerStyle={styles.icon}/> */}
-              <TextInput placeholder="Email" placeholderTextColor="gray"
-              style={styles.textInput} secureTextEntry={true}/> 
-            </View>
-            <View style={styles.separator1}/>
-            <View style={styles.containerSignIn}>
-              <Button  title='Ingresar' backgroundColor='#ffa100'/>
-            </View>            
+            <Form onSubmit={ this.loginAccess }>
+              <View style={styles.containerUserName}>
+                {/* <Icon type="font-awesome" name="user" color="gray" containerStyle={styles.icon}/> */}
+                <TextInput placeholder="Nombre" placeholderTextColor="gray"
+                style={styles.textInput}
+                type="text"
+                name="nombre"
+                value={ nombre }
+                onChange={ this.changeHandler } 
+                /> 
+              </View>
+              <View style={styles.separator1}/>
+              <View style={styles.containerPassword}>
+                {/* <Icon type="entypo" name="key" color="gray" containerStyle={styles.icon}/> */}
+                <TextInput placeholder="Email" placeholderTextColor="gray"
+                style={styles.textInput} secureTextEntry={true}
+                type="text"
+                name="correo"
+                value={ correo }
+                onChange={ this.changeHandler } 
+                /> 
+              </View>
+              <View style={styles.separator1}/>
+              <View style={styles.containerSignIn}>
+                <Button type="submit" title='Ingresar' backgroundColor='#ffa100'/>
+              </View>   
+            </Form>         
           </View>        
         </ImageBackground>
     );
