@@ -1,17 +1,45 @@
 import React, {Component} from 'react'
 import { Modal, ImageBackground, Text, TextInput, SafeAreaView, TouchableHighlight, View, Alert, Button, StyleSheet, Image} from 'react-native'
 //import ImagePicker from 'react-native-image-picker'
-
+import axios from 'axios';
 
   const image = 'https://img.freepik.com/psd-gratis/superposicion-sombra-sobre-fondo-textura-madera-blanca_1048-10825.jpg?size=626&ext=jpg'
   //const fondo = require('../../assets/fondo.jpg')
+  const API_URL = "http://192.168.1.7:3000/api/menu";  //CAMBIAR DEPENDIENDO IP DE SU MAQUINA
 
   export default class Menu extends Component {
     
     constructor(props) {
       super(props);
       this.state = {
+        nombre: '',
+        descripcion: '',
+        precio: '',
         filePath: {},
+      }
+    }
+
+    changeNombre = (nombre) => {
+      this.setState({nombre})
+    }
+    changeDescripcion = (descripcion) => {
+      this.setState({descripcion})
+    }
+    changePrecio = (precio) => {
+      this.setState({precio})
+    }
+
+    saveData = e => {
+      if (this.state.nombre === "" || this.state.descripcion === "" || this.state.precio === "") {
+        alert("Complete todos los datos para continuar...");
+      } else {
+        axios.post(API_URL, this.state)
+        .then(response => {
+          alert("Agregado Exitosamente");
+        })
+        .catch(error => {
+          alert("Ups!! ...")
+        })
       }
     }
 
@@ -75,28 +103,31 @@ import { Modal, ImageBackground, Text, TextInput, SafeAreaView, TouchableHighlig
                 <TextInput
                   style={{height: 40}}
                   placeholder="Escribe aquí el producto"
-                  onChangeText={(text) => this.setState({text})}
-                  value={this.state.text}
+                  value={ this.state.nombre }
+                  onChangeText={ (e) => this.changeNombre(e) }
                 />
                 <Text>Descripción:</Text>
                 <TextInput
                   style={{height: 40}}
                   placeholder="Escribe aquí la descripción"
-                  onChangeText={(text) => this.setState({text})}
-                  value={this.state.text}
+                  value={ this.state.descripcion }
+                  onChangeText={ (e) => this.changeDescripcion(e) }
                 />
                 <Text>Precio:</Text>
                 <TextInput
                   style={{height: 40}}
                   placeholder="Escribe aquí el precio"
-                  onChangeText={(text) => this.setState({text})}
-                  value={this.state.text}
+                  value={ this.state.precio }
+                  onChangeText={ (e) => this.changePrecio(e) }
                 />
                 <TouchableHighlight
                   onPress={() => {
                     this.setModalVisible(!this.state.modalVisible);
                   }}>
                   <Text>Atrás</Text>
+                </TouchableHighlight>
+                <TouchableHighlight onPress={() => {this.saveData()}}>
+                  <Text>Grabar</Text>
                 </TouchableHighlight>
               </View>
             </View>

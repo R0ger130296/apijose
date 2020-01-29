@@ -2,9 +2,9 @@ const express = require("express");
 
 const router = express.Router();
 
- const Menu = require("../models/menu");
- const Pedido = require("../models/pedido");
- const persons = require("../models/persona");
+const Menu = require("../models/menu");
+const Pedido = require("../models/pedido");
+const persons = require("../models/persona");
 
 router.get("/menu", (req, res) => {
     const { query } = req;
@@ -20,6 +20,7 @@ router.get("/menu", (req, res) => {
 router.post("/menu", (req, res, next) => {
     const datos = {
         foto: req.body.foto,
+        nombre: req.body.nombre,
         descripcion: req.body.descripcion,
         precio: req.body.precio,
         fecha: req.body.fecha,
@@ -82,7 +83,7 @@ router.delete("/menu", async (req, res) => {
 });
 
 
-//scooter personas
+//personas
 router.get("/persona", (req, res) => {
     const { query } = req;
     persons.findAll({ where: query })
@@ -156,7 +157,7 @@ router.delete("/persona", async (req, res) => {
 
 
 
-//tipo_personas Pedido
+//Pedido
 router.get("/pedido", (req, res) => {
     const { query } = req;
     Pedido.findAll({ where: query })

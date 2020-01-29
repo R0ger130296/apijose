@@ -10,6 +10,7 @@ create table personas(
 
 create table menus(
   id int auto_increment not null  primary key,
+  nombre varchar(150),
   foto blob,
   descripcion varchar(150),
   precio decimal(10, 2),
