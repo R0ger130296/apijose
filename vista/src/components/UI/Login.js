@@ -1,29 +1,24 @@
-import * as React from 'react';
+import React,{Component} from 'react';
 import { Text,TextInput,View,Button, Image,ImageBackground, StyleSheet, Form } from 'react-native';
+
 //import { Router, Scene } from 'react-native-router-flux'
-import { createBottomTabNavigator } from 'react-navigation-tabs';
-import Menu from './Menu'
 import axios from 'axios';
 
 const imgbg = require('../../assets/hamburger-895831_1280.jpg');
 
 const API_URL = "http://192.168.1.7:3000/api/login";  //CAMBIAR DEPENDIENDO IP DE SU MAQUINA
 
-class MenuScreen extends React.Component {
-  render() {
-    return (
-      <Menu />
-    );
-  }
-}
-
-export default class LoginScreen extends React.Component {
+export default class LoginScreen extends Component {
   constructor(props){
     super(props);
     this.state = {
-      correo: '',
-      nombre: ''
+
     };
+  }
+
+  state = {
+    nombre:'',
+    correo:''
   }
 
   changeHandler = (e) => {
@@ -52,13 +47,10 @@ export default class LoginScreen extends React.Component {
     header: null,
     error:null,
     title: 'Bienvenidos',
-    nombre:'',
-    correo:'',
     sending:false
   }
 
   render() {
-    const { correo, nombre } = this.state
     return (
         <ImageBackground source={{imgbg}} style={{width: '100%', height: '100%'}}>
           <View style={styles.container}>
@@ -69,7 +61,7 @@ export default class LoginScreen extends React.Component {
                 style={styles.textInput}
                 type="text"
                 name="nombre"
-                value={ nombre }
+                value={ this.state.nombre }
                 onChange={ this.changeHandler } 
                 /> 
               </View>
@@ -80,7 +72,7 @@ export default class LoginScreen extends React.Component {
                 style={styles.textInput} secureTextEntry={true}
                 type="text"
                 name="correo"
-                value={ correo }
+                value={ this.state.correo }
                 onChange={ this.changeHandler } 
                 /> 
               </View>

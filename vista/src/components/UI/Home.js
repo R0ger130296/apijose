@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createAppContainer } from 'react-navigation';
 import Pedidos from './Pedidos';
 import Menu from './Menu';
+import Producto from './Producto'
 
 class MenuScreen extends React.Component {
   render() {
@@ -21,7 +22,16 @@ class PedidoScreen extends React.Component {
   }
 }
 
+class ProductoScreen extends React.Component{
+  render(){
+    return(
+      <Producto/>
+    )
+  }
+}
+
 const TabNavigator = createBottomTabNavigator({
+  Producto: { screen: ProductoScreen},
   Menu: { screen: MenuScreen },
   Pedidos: { screen: PedidoScreen },
 });
