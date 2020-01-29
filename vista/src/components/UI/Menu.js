@@ -2,10 +2,11 @@ import React, {Component} from 'react'
 import { Modal, ImageBackground, Text, TextInput, SafeAreaView, TouchableHighlight, View, Alert, Button, StyleSheet, Image} from 'react-native'
 //import ImagePicker from 'react-native-image-picker'
 import axios from 'axios';
+import DatePicker from 'react-native-datepicker'
 
   const image = 'https://img.freepik.com/psd-gratis/superposicion-sombra-sobre-fondo-textura-madera-blanca_1048-10825.jpg?size=626&ext=jpg'
   //const fondo = require('../../assets/fondo.jpg')
-  const API_URL = "http://192.168.1.7:3000/api/menu";  //CAMBIAR DEPENDIENDO IP DE SU MAQUINA
+  const API_URL = "http://172.16.11.120:3000/api/menu";  //CAMBIAR DEPENDIENDO IP DE SU MAQUINA
 
   export default class Menu extends Component {
     
@@ -15,7 +16,7 @@ import axios from 'axios';
         nombre: '',
         descripcion: '',
         precio: '',
-        filePath: {},
+        fecha: ''
       }
     }
 
@@ -28,17 +29,20 @@ import axios from 'axios';
     changePrecio = (precio) => {
       this.setState({precio})
     }
+    changeFecha = (fecha) => {
+      this.setState({fecha})
+    }
 
     saveData = e => {
-      if (this.state.nombre === "" || this.state.descripcion === "" || this.state.precio === "") {
+      if (this.state.nombre === "" || this.state.descripcion === "" || this.state.precio === "" || this.state.fecha === "") {
         alert("Complete todos los datos para continuar...");
       } else {
         axios.post(API_URL, this.state)
         .then(response => {
-          alert("Agregado Exitosamente");
+          alert("Agregado Exitosamente :D");
         })
         .catch(error => {
-          alert("Ups!! ...")
+          alert("Ups!! Algo salio mal... Disculpe Pablito :c")
         })
       }
     }
@@ -50,38 +54,7 @@ import axios from 'axios';
     setModalVisible(visible) {
       this.setState({modalVisible: visible});
     }
-//----------Esta seccion es para subir fotos desde el celular
-  //   chooseFile = () => {
-  //     var options = {
-  //       title: 'Select Image',
-  //       customButtons: [
-  //         { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
-  //       ],
-  //       storageOptions: {
-  //         skipBackup: true,
-  //         path: 'images',
-  //       },
-  //   };
- 
-  //   ImagePicker.showImagePicker(options, response => {
-  //     console.log('Response = ', response);
- 
-  //     if (response.didCancel) {
-  //       console.log('User cancelled image picker');
-  //     } else if (response.error) {
-  //       console.log('ImagePicker Error: ', response.error);
-  //     } else if (response.customButton) {
-  //       console.log('User tapped custom button: ', response.customButton);
-  //       alert(response.customButton);
-  //     } else {
-  //       let source = response;
-  //       this.setState({
-  //         filePath: source,
-  //       });
-  //     }
-  //   });
-  // };
-//-----------Fin de seccion  
+
     render() {
       return (
       <ImageBackground source={{uri:image}} style={{width: '100%', height: '100%'}}>
@@ -119,6 +92,31 @@ import axios from 'axios';
                   placeholder="Escribe aquí el precio"
                   value={ this.state.precio }
                   onChangeText={ (e) => this.changePrecio(e) }
+                />
+                <Text>Fecha:</Text>
+                <DatePicker
+                  style={{width: 200}}
+                  date={this.state.fecha}
+                  mode="date"
+                  placeholder="select date"
+                  format="YYYY-MM-DD"
+                  minDate="2020-01-01"
+                  maxDate="2021-01-01"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      position: 'absolute',
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0
+                    },
+                    dateInput: {
+                      marginLeft: 36
+                    }
+                    // ... You can check the source to find the other keys.
+                  }}
+                  onDateChange={(fecha) => {this.setState({fecha: fecha})}}
                 />
                 <TouchableHighlight
                   onPress={() => {
