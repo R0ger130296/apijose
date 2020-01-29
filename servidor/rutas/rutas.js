@@ -4,7 +4,7 @@ const router = express.Router();
 
 const Menu = require("../models/menu");
 const Pedido = require("../models/pedido");
-const persons = require("../models/persona");
+const Persona = require("../models/persona");
 
 router.get("/menu", (req, res) => {
     const { query } = req;
@@ -236,7 +236,7 @@ router.post("/login", (req, res, next) => {
     const correo = req.body.correo
     const nombre = req.body.nombre
 
-    persons.findAll()
+    Persona.findAll()
     .then(resultado => {
         resultado.forEach(element => {
             if(element.correo == correo && element.nombre == nombre){

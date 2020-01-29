@@ -31,8 +31,8 @@ class ProductoScreen extends React.Component{
 }
 
 const TabNavigator = createBottomTabNavigator({
-  Producto: { screen: ProductoScreen},
   Menu: { screen: MenuScreen },
+  Producto: { screen: ProductoScreen},
   Pedidos: { screen: PedidoScreen },
 });
 

@@ -3,7 +3,7 @@ import { StyleSheet, View, ScrollView, Button,Text,TextInput,TouchableHighlight,
 import axios from 'axios';
   
 const image = 'https://img.freepik.com/psd-gratis/superposicion-sombra-sobre-fondo-textura-madera-blanca_1048-10825.jpg?size=626&ext=jpg'
-const API_URL = `http://172.16.11.120:3000/api/menu`;  //CAMBIAR DEPENDIENDO IP DE SU MAQUINA 
+const API_URL = `http://192.168.43.44:3000/api/menu`;  //CAMBIAR DEPENDIENDO IP DE SU MAQUINA 
 
 export default class Producto extends Component {
     constructor(props) {
@@ -21,15 +21,15 @@ export default class Producto extends Component {
     componentDidMount() {
       axios.get(API_URL)
       .then(response => {
-        this.setState({id: response.data[3].id})
-        this.setState({nombre: response.data[3].nombre})
-        this.setState({descripcion: response.data[3].descripcion})
-        this.setState({precio: response.data[3].precio})
-        this.setState({fecha: response.data[3].fecha})
+        this.setState({id: response.data[4].id})
+        this.setState({nombre: response.data[4].nombre})
+        this.setState({descripcion: response.data[4].descripcion})
+        this.setState({precio: response.data[4].precio})
+        this.setState({fecha: response.data[4].fecha})
         this.setState({arrayRes: response.data})
       })
       .catch(error => {
-        alert("Ups!! Algo salio mal... Disculpe Pablito :c")
+        // alert("Ups!! Algo salio mal... Disculpe Pablito :c")
       })
     }
 

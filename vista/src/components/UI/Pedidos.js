@@ -4,7 +4,7 @@ import { Table, Row } from 'react-native-table-component'
 import axios from 'axios';
 
 const image = 'https://img.freepik.com/psd-gratis/superposicion-sombra-sobre-fondo-textura-madera-blanca_1048-10825.jpg?size=626&ext=jpg'
-const API_URL = "http://172.16.11.120:3000/api/pedido";  //CAMBIAR DEPENDIENDO IP DE SU MAQUINA 
+const API_URL = "http://192.168.43.44:3000/api/pedido";  //CAMBIAR DEPENDIENDO IP DE SU MAQUINA 
 
 export default class Pedido extends Component {
     constructor(props) {
@@ -29,9 +29,13 @@ export default class Pedido extends Component {
 
     render() {
       const { pedidos } = this.state
+      const rowData = [];
+      const tableData=[];
+      rowData.push(`${this.state.pedidos.idpersona}${this.state.idmenu}${this.state.cantidad}`);
+      tableData.push(rowData);
 
       const state = this.state;
-      // const tableData = [];
+      //const tableData = [];
       // for (let i = 0; i < 30; i += 1) {
       //   const rowData = [];
       //   for (let j = 0; j < 9; j += 1) {
@@ -47,16 +51,16 @@ export default class Pedido extends Component {
             <View>
               <Table borderStyle={{borderColor: '#C1C0B9'}}>
                 <Row data={state.tableHead} style={styles.header} textStyle={styles.text}/>
-                <Row>
+                  <Row>
                   {
                     pedidos.map(element => 
-                      <Text key={element.id}
+                      <Text key={element.pedidos}
                         style={[styles.row && {backgroundColor: '#F7F6E7'}]}
                         textStyle={styles.text}
-                      >{element.idmenu}</Text>
+                      >{element.state}</Text>
                     )
                   }
-                </Row>
+                    </Row>
               </Table>
               <ScrollView style={styles.dataWrapper}>
                 <Table borderStyle={{borderColor: '#C1C0B9'}}>

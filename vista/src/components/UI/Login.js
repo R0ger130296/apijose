@@ -1,40 +1,53 @@
 import React,{Component} from 'react';
-import { Text,TextInput,View,Button, Image,ImageBackground, StyleSheet, Form } from 'react-native';
-
+import  { createStackNavigator } from 'react-navigation-stack';
+import { createAppContainer } from 'react-navigation';
+import { Text, TextInput,View,Button, ImageBackground, StyleSheet } from 'react-native';
+import Home from './Home';
 //import { Router, Scene } from 'react-native-router-flux'
 import axios from 'axios';
 
-const imgbg = require('../../assets/hamburger-895831_1280.jpg');
+const screens = {
+  Home: {
+      screen: Home,
+      navigationOptions: {
+          headerShown: false  
+      },
+  },
+}
 
-const API_URL = "http://192.168.1.7:3000/api/login";  //CAMBIAR DEPENDIENDO IP DE SU MAQUINA
+
+//const LoginStack = createStackNavigator(screens);
+
+const image = 'https://img.freepik.com/psd-gratis/superposicion-sombra-sobre-fondo-textura-madera-blanca_1048-10825.jpg?size=626&ext=jpg'
+
+const API_URL = "http://192.168.43.44:3000/api/login";  //CAMBIAR DEPENDIENDO IP DE SU MAQUINA
 
 export default class LoginScreen extends Component {
   constructor(props){
     super(props);
     this.state = {
-
+      nombre:'',
+      correo:''
     };
   }
 
-  state = {
-    nombre:'',
-    correo:''
+  changeNombre = (nombre) => {
+    this.setState({nombre})
   }
 
-  changeHandler = (e) => {
-    this.setState({ [e.target.name]: e.target.value })
+  changeCorreo = (correo) => {
+    this.setState({correo})
   }
 
-  loginAccess = e => {
-    e.preventDefault()
-    if (this.state.correo === "" || this.state.clave === "") {
+  loginAccess = () => {
+    if (this.state.correo === "" || this.state.nombre === "") {
       alert("Complete todos los datos para continuar...");
     } else {
       axios.post(API_URL, this.state)
       .then(response => {
         if ( response.data.mensaje === "found" ) {
           alert("entrar")
-          // window.location.assign("http://localhost:3000/home");
+          // return this.props.navigation.push('Home')
         }
       })
       .catch(error => {
@@ -50,37 +63,31 @@ export default class LoginScreen extends Component {
     sending:false
   }
 
-  render() {
+  render() { 
     return (
-        <ImageBackground source={{imgbg}} style={{width: '100%', height: '100%'}}>
+        <ImageBackground source={{uri: image}} style={{width: '100%', height: '100%'}}>
           <View style={styles.container}>
-            <Form onSubmit={ this.loginAccess }>
+            <View>
               <View style={styles.containerUserName}>
-                {/* <Icon type="font-awesome" name="user" color="gray" containerStyle={styles.icon}/> */}
                 <TextInput placeholder="Nombre" placeholderTextColor="gray"
                 style={styles.textInput}
-                type="text"
-                name="nombre"
                 value={ this.state.nombre }
-                onChange={ this.changeHandler } 
+                onChangeText={ this.changeNombre } 
                 /> 
               </View>
               <View style={styles.separator1}/>
               <View style={styles.containerPassword}>
-                {/* <Icon type="entypo" name="key" color="gray" containerStyle={styles.icon}/> */}
                 <TextInput placeholder="Email" placeholderTextColor="gray"
-                style={styles.textInput} secureTextEntry={true}
-                type="text"
-                name="correo"
+                style={styles.textInput}
                 value={ this.state.correo }
-                onChange={ this.changeHandler } 
+                onChangeText={ this.changeCorreo } 
                 /> 
               </View>
               <View style={styles.separator1}/>
               <View style={styles.containerSignIn}>
-                <Button type="submit" title='Ingresar' backgroundColor='#ffa100'/>
+                <Button title='Ingresar' backgroundColor='#ffa100' onPress={ () => { this.loginAccess() } }/>
               </View>   
-            </Form>         
+            </View>         
           </View>        
         </ImageBackground>
     );

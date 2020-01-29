@@ -6,7 +6,7 @@ import DatePicker from 'react-native-datepicker'
 
   const image = 'https://img.freepik.com/psd-gratis/superposicion-sombra-sobre-fondo-textura-madera-blanca_1048-10825.jpg?size=626&ext=jpg'
   //const fondo = require('../../assets/fondo.jpg')
-  const API_URL = "http://172.16.11.120:3000/api/menu";  //CAMBIAR DEPENDIENDO IP DE SU MAQUINA
+  const API_URL = "http://192.168.43.44:3000/api/menu";  //CAMBIAR DEPENDIENDO IP DE SU MAQUINA
 
   export default class Menu extends Component {
     
@@ -69,9 +69,9 @@ import DatePicker from 'react-native-datepicker'
             }}>
             <View style={styles.modalStyle}>
               <View>
-                <Button title="Choose File" 
+                {/* <Button title="Choose File" 
                 // onPress={this.chooseFile.bind(this)} 
-                />
+                /> */}
                 <Text>Producto:</Text>
                 <TextInput
                   style={{height: 40}}
